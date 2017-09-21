@@ -18,7 +18,17 @@ class TestBook < Test::Unit::TestCase
     books = Rbooks::Book.search({title: ["なれるSE"]})
     assert_equal false, books.empty?
 
-    ["count", "page", "first", "last", "hits", "carrier", "pageCount", "Items", "GenreInformation"].each do |key|
+    [
+      "count",
+      "page",
+      "first",
+      "last",
+      "hits",
+      "carrier",
+      "pageCount",
+      "Items",
+      "GenreInformation"
+    ].each do |key|
       assert books.key?(key)
     end
   end
