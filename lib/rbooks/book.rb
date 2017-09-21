@@ -1,6 +1,8 @@
 module Rbooks
   require "uri"
   require "net/http"
+  require "json"
+  require "forwardable"
 
   class Book
     DEFAULT_OPT = {format: "json", formatVersion: "1"}
@@ -26,8 +28,12 @@ module Rbooks
       end
     end
 
+
     def initialize(response)
-      @response = response
+      @response = JSON.parse response
+      @items = @response['Items']
     end
+
+    def_delegators @items, :[], :each
   end
 end
