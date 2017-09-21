@@ -1,5 +1,6 @@
 module Rbooks
-  require "URI"
+  require "uri"
+  require "net/http"
 
   class Book
     DEFAULT_OPT = {format: "json", formatVersion: "1"}
@@ -7,18 +8,26 @@ module Rbooks
 
     class << self
       def search(opt)
-        params = DEFAULT_OPT.merge opt
+        params = DEFAULT_OPT.merge(opt)
+        params = self.concat_each_item_by_space params
 
-        params = self.encode_each_params params
+        uri = URI(Rbook::ENDPOINT_URL)
+        uri.query = URI.encode_www_form(params)
+
+        response = Net::HTTP.get_response(uri)
       end
 
-      def encode_each_params(params)
+      def concat_each_item_by_space(params)
         REQUIRE_URL_ENCODE.each do |key|
-          params[key] = Rbooks::url_encode params[key].join(' ') if params.key? key
+          params[key] = params[key].join(' ') if params.key? key
         end
 
         return params
       end
+    end
+
+    def initialize(response)
+      @response = response
     end
   end
 
