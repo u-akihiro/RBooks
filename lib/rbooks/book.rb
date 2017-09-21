@@ -4,7 +4,7 @@ module Rbooks
 
   class Book
     DEFAULT_OPT = {format: "json", formatVersion: "1"}
-    REQUIRE_URL_ENCODE = [:title, :author, :publisher, :isbn, :booksGenreId]
+    REQUIRE_CONCAT = [:title, :author, :publisher, :isbn, :booksGenreId]
 
     class << self
       def search(opt)
@@ -18,8 +18,8 @@ module Rbooks
       end
 
       def concat_each_item_by_space(params)
-        REQUIRE_URL_ENCODE.each do |key|
-          params[key] = params[key].join(' ') if params.key? key
+        REQUIRE_CONCAT.each do |key|
+            params[key] = params[key].join(' ') if params.key? key
         end
 
         return params
@@ -28,12 +28,6 @@ module Rbooks
 
     def initialize(response)
       @response = response
-    end
-  end
-
-  class << self
-    def url_encode(str)
-      URI.encode_www_form_component str
     end
   end
 end
