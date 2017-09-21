@@ -10,6 +10,16 @@ class TestBook < Test::Unit::TestCase
     assert_equal params[:title], "なれるSE こころ"
   end
 
-  def test_raised_exception
+  def test_exist_application_id
+    assert Rbooks.const_defined?(:APPLICATION_ID)
+  end
+
+  def test_search
+    books = Rbooks::Book.search({title: ["なれるSE"]})
+    assert_equal false, books.empty?
+
+    ["count", "page", "first", "last", "hits", "carrier", "pageCount", "Items", "GenreInformation"].each do |key|
+      assert books.key?(key)
+    end
   end
 end
